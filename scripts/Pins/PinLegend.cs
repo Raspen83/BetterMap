@@ -141,21 +141,26 @@ namespace BetterMap.Scripts.Pins
         {
             if (vanilla == null) return;
 
-            Anchor(vanilla, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f));
-            vanilla.anchoredPosition = new Vector2(-Margin, 0f);
-
-            if (extras != null)
-            {
-                Anchor(extras, new Vector2(1f, 0.5f), new Vector2(1f, 1f));
-                extras.anchoredPosition = new Vector2(-Margin - vanilla.rect.width - Gap, vanilla.rect.height / 2f);
-            }
-
+            // The corner first, so the column can be told how much room it has left.
             var toggle = map.m_publicPosition != null ? map.m_publicPosition.transform.parent as RectTransform : null;
 
             if (toggle != null)
             {
                 Anchor(toggle, new Vector2(1f, 0f), new Vector2(1f, 0f));
                 toggle.anchoredPosition = new Vector2(-Margin, Margin);
+            }
+
+            Anchor(vanilla, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f));
+
+            var lift = Lift(vanilla, toggle);
+
+            vanilla.anchoredPosition = new Vector2(-Margin, lift);
+
+            if (extras != null)
+            {
+                Anchor(extras, new Vector2(1f, 0.5f), new Vector2(1f, 1f));
+                extras.anchoredPosition =
+                    new Vector2(-Margin - vanilla.rect.width - Gap, lift + vanilla.rect.height / 2f);
             }
 
             var biome = map.m_biomeNameLarge != null ? map.m_biomeNameLarge.rectTransform : null;
@@ -169,6 +174,23 @@ namespace BetterMap.Scripts.Pins
 
                 map.m_biomeNameLarge.alignment = TMPro.TextAlignmentOptions.Top;
             }
+        }
+
+        // Centred, a column of fourteen reaches the checkbox in the corner and takes the clicks
+        // meant for it. The map scales with the height of the screen, so that is the same at
+        // every resolution and has to be measured rather than assumed away.
+        private static float Lift(RectTransform panel, RectTransform toggle)
+        {
+            var parent = panel.parent as RectTransform;
+            if (parent == null || toggle == null) return 0f;
+
+            var room = (parent.rect.height - panel.rect.height) / 2f;
+            var needed = Margin + toggle.rect.height + Gap;
+
+            if (room >= needed) return 0f;
+
+            // Never past the top edge. If even that is not enough, rows have to come off.
+            return Mathf.Min(needed - room, Mathf.Max(room, 0f));
         }
 
         private static void Anchor(RectTransform rect, Vector2 anchor, Vector2 pivot)

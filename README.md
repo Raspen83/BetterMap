@@ -102,6 +102,8 @@ Then one section per biome, **Auto Pins - Meadows** through **Auto Pins - Ocean*
 
 ### Legend
 
+The column is also pushed up far enough to clear that box on its own, so a default install does not overlap it. These switches are for when you want the column shorter anyway, or when so many rows are on that even the top of the screen is not enough room.
+
 One switch per icon — **Show Ore**, **Show Forage**, **Show Dungeon**, **Show Loot**, **Show Spawner**, **Show Vegvisir**, **Show Beehive**, **Show Tar**, **Show Sap** — all on by default. Turning one off takes its row out of the map's pin legend and shortens the column by one, which is how a legend taller than the screen is kept clear of the game's *visible to other players* box. The pins themselves are unchanged: same icon, pinned the same way, they only lose their filter button. Takes effect the next time you load a world.
 
 This is the one section that is **not** synced with the server. How long a legend fits is a matter of the screen it is drawn on, and no one else can see it.

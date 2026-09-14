@@ -110,6 +110,13 @@ only the button, and the rows left close the gap, so the column is shorter by
 every one taken out. It is not synced, because how long a column fits is a
 matter of the screen it is drawn on.
 
+Centred, the column is long enough to cover the game's own visible-to-other-players
+box in the corner, which is a click it takes and never gives back. The map
+scales with the height of the screen, so that is true at every resolution and
+not a thing one monitor has: the room left under the column is measured against
+what the box needs and the column is moved up by the difference, no further than
+the top edge. Past that there is no arrangement that fits and a row has to go.
+
 Creatures and vehicles get a type each but no button. Whether they are drawn is
 a setting, not something the map's filter should reach; sharing a type meant
 hiding the plain pin hid every creature and hiding the campfire hid every boat.
