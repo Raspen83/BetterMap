@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -39,6 +40,14 @@ namespace BetterMap
         public static ConfigEntry<int> deathMarkersKept;
         public static ConfigEntry<float> explorationRadius;
         public static ConfigEntry<float> iconScale;
+
+        private static readonly Dictionary<PinCategory, ConfigEntry<bool>> legendRows =
+            new Dictionary<PinCategory, ConfigEntry<bool>>();
+
+        public static bool LegendShows(PinCategory category)
+        {
+            return !legendRows.TryGetValue(category, out var row) || row.Value;
+        }
 
         public static ConfigEntry<bool> debugMode;
         public static ConfigEntry<bool> forgetPinned;
@@ -174,6 +183,7 @@ namespace BetterMap
                     new AcceptableValueRange<float>(0.5f, 3f)));
 
             BindPinRules();
+            BindLegend();
 
             debugMode = ConfigSync("Debug", "Debug Mode", false,
                 new ConfigDescription(
@@ -193,6 +203,19 @@ namespace BetterMap
             {
                 rule.Enabled = ConfigSync($"Auto Pins - {rule.Biome}", rule.Name, rule.DefaultOn,
                     new ConfigDescription(rule.Description));
+            }
+        }
+
+        // Not synced: how long a column fits is a matter of the screen it is drawn on, and it
+        // changes nothing anyone else can see.
+        private void BindLegend()
+        {
+            foreach (var category in PinLegend.Categories)
+            {
+                legendRows[category] = ConfigSync("Legend", $"Show {category}", true,
+                    new ConfigDescription(
+                        $"Give {category} pins a row of their own in the map's pin legend. Turning it off shortens the column by one, which is how a legend too tall for the screen is kept clear of the game's \"visible to other players\" box. The pins are unchanged, they only lose their filter button. Takes effect the next time a world is loaded."),
+                    false);
             }
         }
 

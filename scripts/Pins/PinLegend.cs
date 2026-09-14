@@ -9,7 +9,9 @@ namespace BetterMap.Scripts.Pins
 {
     public static class PinLegend
     {
-        private static readonly PinCategory[] Ours =
+        // The pins that can have a row of their own. The index is the pin type's number, so the
+        // order stays put whether or not a row is shown.
+        public static readonly PinCategory[] Categories =
         {
             PinCategory.Ore,
             PinCategory.Forage,
@@ -96,15 +98,14 @@ namespace BetterMap.Scripts.Pins
             var extras = death != null ? death.parent as RectTransform : null;
 
             var first = Enum.GetValues(typeof(Minimap.PinType)).Length;
-            Grow(map, first + Ours.Length + 2);
+            Grow(map, first + Categories.Length + 2);
 
             var step = Step(map);
+            var rows = 0;
 
-            Stretch(vanilla, step, 5 + Ours.Length);
-
-            for (var i = 0; i < Ours.Length; i++)
+            for (var i = 0; i < Categories.Length; i++)
             {
-                var category = Ours[i];
+                var category = Categories[i];
                 var type = (Minimap.PinType)(first + i);
 
                 var sprite = Icons.For(category);
@@ -112,20 +113,28 @@ namespace BetterMap.Scripts.Pins
 
                 map.m_icons.Add(new Minimap.SpriteData { m_name = type, m_icon = sprite });
 
+                _types[category] = type;
+                _categories[type] = category;
+
+                // A row turned off leaves the type and the sprite where they are and only loses
+                // its button, the way creatures and vehicles never had one. The rows that are
+                // left close the gap, so the column is shorter by every one taken out.
+                if (!Plugin.LegendShows(category)) continue;
+
                 var button = Clone(map, template, vanilla, type, sprite, category);
                 if (button == null) continue;
 
-                button.anchoredPosition = firstIcon.anchoredPosition + step * (5 + i);
-
-                _types[category] = type;
-                _categories[type] = category;
+                button.anchoredPosition = firstIcon.anchoredPosition + step * (5 + rows);
+                rows++;
             }
 
-            Unlisted(map, first + Ours.Length);
+            Stretch(vanilla, step, 5 + rows);
+
+            Unlisted(map, first + Categories.Length);
 
             Arrange(map, vanilla, extras);
 
-            Plugin.Logger.LogInfo($"PinLegend: {_types.Count} of our pins added to the legend");
+            Plugin.Logger.LogInfo($"PinLegend: {_types.Count} of our pins added to the legend, {rows} with a row");
         }
 
         private static void Arrange(Minimap map, RectTransform vanilla, RectTransform extras)

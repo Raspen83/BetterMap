@@ -103,6 +103,13 @@ to the length of the enum and indexed straight into, so it is grown first, and
 with the sprite drawn for it. And the legend is a column of buttons, one per
 type, which are cloned into the game's own panel so the legend stays one list.
 
+Which of them get a button is a setting of its own, kept apart from whether
+anything is pinned at all: a row is screen space, not behaviour. Turning one off
+leaves the type, the sprite and the pinning exactly where they were and drops
+only the button, and the rows left close the gap, so the column is shorter by
+every one taken out. It is not synced, because how long a column fits is a
+matter of the screen it is drawn on.
+
 Creatures and vehicles get a type each but no button. Whether they are drawn is
 a setting, not something the map's filter should reach; sharing a type meant
 hiding the plain pin hid every creature and hiding the campfire hid every boat.

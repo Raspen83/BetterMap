@@ -47,6 +47,7 @@ Portals get pinned where you place them, named by their tag. Rename a portal and
 ### 🗺️ Map
 
 - The pin legend gets a row for each of the new icons, so you can place them by hand and hide them with a right click, same as the game's own
+- Rows you have no use for can be switched off one at a time, for a screen the full column does not fit
 - Pin icons can be made bigger
 - The map uncovers as much ground as you want it to
 
@@ -98,6 +99,12 @@ Then one section per biome, **Auto Pins - Meadows** through **Auto Pins - Ocean*
 | Death Markers Kept | 3 | How many of your death markers to keep |
 | Exploration Radius | 100m | How much ground the map uncovers as you walk. Also how far creatures and resources are spotted |
 | Icon Scale | 1.25 | The size of every pin on the map |
+
+### Legend
+
+One switch per icon — **Show Ore**, **Show Forage**, **Show Dungeon**, **Show Loot**, **Show Spawner**, **Show Vegvisir**, **Show Beehive**, **Show Tar**, **Show Sap** — all on by default. Turning one off takes its row out of the map's pin legend and shortens the column by one, which is how a legend taller than the screen is kept clear of the game's *visible to other players* box. The pins themselves are unchanged: same icon, pinned the same way, they only lose their filter button. Takes effect the next time you load a world.
+
+This is the one section that is **not** synced with the server. How long a legend fits is a matter of the screen it is drawn on, and no one else can see it.
 
 ## Compatibility
 
